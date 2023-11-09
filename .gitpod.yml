@@ -13,6 +13,7 @@ tasks:
     command: |
       docker ps
       gp ports await 3307
+      mysql --host=127.0.0.1 --port=3307 -u root -padmin -e "CREATE database prestashop;"
 ports:
   - port: 6080
     onOpen: open-preview
