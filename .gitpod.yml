@@ -1,0 +1,22 @@
+image: gitpod/workspace-full-vnc
+
+tasks:
+  - name: InventoryManagement
+    init: |
+      docker network create prestashop-net
+      docker run -ti --name some-mysql --network prestashop-net -e MYSQL_ROOT_PASSWORD=admin -p 3307:3306 -d mysql:5.7
+      docker run -ti --name some-prestashop --network prestashop-net -e DB_SERVER=some-mysql -p 8080:80 -d prestashop/prestashop:latest
+      sudo apt update
+      sudo apt install -y mysql-client
+      pip install robotframework-browser robotframework-seleniumlibrary robotframework-databaselibrary robotframework-requests
+      rfbrowser init
+    command: |
+      docker ps
+      gp ports await 3307
+ports:
+  - port: 6080
+    onOpen: open-preview
+vscode:
+  extensions:
+    - ms-python.python
+    - d-biehl.robotcode
